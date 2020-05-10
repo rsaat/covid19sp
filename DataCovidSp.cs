@@ -12,7 +12,7 @@ namespace ExtractCovid19Sp
     /// <summary>
     ///    Extrai dados do boletim diário da prefeitura de são paulo 
     /// </summary>
-    [DelimitedRecord(";")]
+    [DelimitedRecord(",")]
     [IgnoreFirst]
     public class DataCovidSp
     {
