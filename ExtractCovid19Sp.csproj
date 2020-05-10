@@ -70,9 +70,6 @@
     <Compile Include="PdfTextExtraction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="coletimExemplo.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="frmExportCovidToCsv.resx">
       <DependentUpon>frmExportCovidToCsv.cs</DependentUpon>
     </EmbeddedResource>

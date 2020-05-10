@@ -26,7 +26,7 @@ namespace ExtractCovid19Sp
 
             foreach (PdfLoadedPage loadedPage in loadedPages)
             {
-                extractedText += loadedPage.ExtractText(IsLayout: true);
+                extractedText += loadedPage.ExtractText(IsLayout: false);
             }
 
             loadedDocument.Close(true);

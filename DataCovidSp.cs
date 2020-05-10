@@ -80,7 +80,7 @@ namespace ExtractCovid19Sp
         }
         private void ParseFatalityTable()
         {
-            var match = SearchTextUsingRegEx("Município de\\s+São Paulo\\s([\\d/.\\s,]+)\\n");
+            var match = SearchTextUsingRegEx("Município de\\s+São Paulo([\\d/.\\s,]+)\\s*O\\s+Sistema");
 
             if (match.Groups.Count<2)
             {
@@ -88,6 +88,9 @@ namespace ExtractCovid19Sp
             }
 
             var text = match.Groups[1].Value.Trim();
+
+            text = text.Replace("\n"," ");
+            text = text.Replace("\r"," ");
 
             var tokens = text.Split(' ');
 
