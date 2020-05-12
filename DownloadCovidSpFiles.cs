@@ -23,6 +23,7 @@ namespace ExtractCovid19Sp
     /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/09052020boletim_covid19_diariov2.pdf
     /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/10052020boletim_covid19_diario.pdf
     /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/11052020boletim_covid-19_diariov3.pdf
+    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/12052020boletim_covid-19_diariov.pdf
     /// </summary>
     public class DownloadCovidSpFiles
     {
@@ -53,6 +54,7 @@ namespace ExtractCovid19Sp
                                                       , "boletim_covid-19_diario.pdf"
                                                       , "boletim_covid-19_diariov2.pdf"
                                                       , "boletim_covid-19_diariov3.pdf"
+                                                      ,"boletim_covid-19_diariov.pdf"
                                                       };
                         for (int i = 0; i < filesToTry.Length; i++)
                         {
