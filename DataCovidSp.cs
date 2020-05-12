@@ -30,28 +30,28 @@ namespace ExtractCovid19Sp
         public DataCovidSp(string textDailyData)
         {
             this.provider = new CultureInfo("pt-BR");
-            this.textDailyData = textDailyData.Replace("\t"," ");
+            this.textDailyData = ReplaceAllSpaceWithSingleSpace(textDailyData);
             ParseData();
 
         }
 
         [FieldConverter(ConverterKind.Date, "yyyy-MM-dd")]
-        public DateTime Date { get;  set; }
+        public DateTime Date { get; set; }
 
         [FieldConverter(ConverterKind.Int32)]
-        public int Suspects { get;  set; }
+        public int Suspects { get; set; }
 
         [FieldConverter(ConverterKind.Int32)]
-        public int ConfirmedCases { get;  set; }
+        public int ConfirmedCases { get; set; }
 
         [FieldConverter(ConverterKind.Int32)]
-        public int DeathsSivep { get;  set; }
+        public int DeathsSivep { get; set; }
 
         [FieldConverter(ConverterKind.Int32)]
-        public int DeathsProAim { get;  set; }
+        public int DeathsProAim { get; set; }
 
         [FieldConverter(ConverterKind.Int32)]
-        public int CtiUsage { get;  set; }
+        public int CtiUsage { get; set; }
 
         private void ParseData()
         {
@@ -66,7 +66,7 @@ namespace ExtractCovid19Sp
 
             //  "Taxa de Ocupação Geral de UTI \\s+(\\d+)",
 
-            var match = SearchTextUsingRegEx("Taxa de Ocupação Geral de UTI \\s+(\\d+)");
+            var match = SearchTextUsingRegEx("Taxa de Ocupação Geral de UTI\\s+(\\d+)");
 
             if (match.Groups.Count < 2)
             {
@@ -80,21 +80,21 @@ namespace ExtractCovid19Sp
         }
         private void ParseFatalityTable()
         {
-            var match = SearchTextUsingRegEx("Município de\\s+São Paulo([\\d/.\\s,]+)\\s*O\\s+Sistema");
+            var match = SearchTextUsingRegEx("Município\\s+de\\s+São Paulo([\\d/.\\s,]+)");
 
-            if (match.Groups.Count<2)
+            if (match.Groups.Count < 2)
             {
                 throw new InvalidOperationException("ParseFatalityTable group not found");
             }
 
             var text = match.Groups[1].Value.Trim();
 
-            text = text.Replace("\n"," ");
-            text = text.Replace("\r"," ");
+            text = text.Replace("\n", " ");
+            text = text.Replace("\r", " ");
 
             var tokens = text.Split(' ');
 
-            tokens = tokens.Where(t=>t.Trim()!="").ToArray();
+            tokens = tokens.Where(t => t.Trim() != "").ToArray();
 
             this.Suspects = ParseInt(tokens[0]);
             this.ConfirmedCases = ParseInt(tokens[1]);
@@ -111,12 +111,36 @@ namespace ExtractCovid19Sp
 
         private void ParseDate()
         {
-            var match = SearchTextUsingRegEx("\\d{2}[\\r\\n]*/[\\r\\n]*\\d{2}[\\r\\n]*/[\\r\\n]*\\d{4}");
+            var match = SearchTextUsingRegEx("\\d{2}\\s*/\\s*\\d{2}\\s*/\\s*\\d{4}");
             var text = match.Value;
-            text = text.Replace("\r","");
-            text = text.Replace("\n","");
-
+           
             this.Date = DateTime.Parse(text, this.provider);
+        }
+
+        private string ReplaceAllSpaceWithSingleSpace(string text)
+        {
+            var regex = new Regex(
+      "[\\s\\t\\n\\r]+",
+    RegexOptions.IgnoreCase
+    | RegexOptions.Multiline
+    | RegexOptions.Singleline
+    | RegexOptions.CultureInvariant
+    | RegexOptions.Compiled
+    );
+
+            text = regex.Replace(text, " ");
+
+            regex = new Regex(
+           "[\\s]+",
+         RegexOptions.IgnoreCase
+         | RegexOptions.Multiline
+         | RegexOptions.Singleline
+         | RegexOptions.CultureInvariant
+         | RegexOptions.Compiled
+         );
+
+            text = regex.Replace(text, " ");
+            return text;
         }
 
         private Match SearchTextUsingRegEx(string pattern)
