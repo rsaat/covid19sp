@@ -49,12 +49,15 @@ namespace ExtractCovid19Sp
                 {
                     using (var client = new WebClient())
                     {
-                        var filesToTry = new string[]{ "boletim_covid19_diariov2.pdf"
+                        var filesToTry = new string[]{  
+                                                        "boletim_covid19_diariov.pdf"
+                                                      , "boletim_covid19_diariov2.pdf"
                                                       , "boletim_covid19_diario.pdf"
+                                                      , "boletim_covid-19_diariov.pdf"
                                                       , "boletim_covid-19_diario.pdf"
                                                       , "boletim_covid-19_diariov2.pdf"
                                                       , "boletim_covid-19_diariov3.pdf"
-                                                      ,"boletim_covid-19_diariov.pdf"
+                                                      
                                                       };
                         for (int i = 0; i < filesToTry.Length; i++)
                         {

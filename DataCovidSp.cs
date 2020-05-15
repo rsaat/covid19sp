@@ -64,16 +64,15 @@ namespace ExtractCovid19Sp
         private void ParseCtiUsage()
         {
 
-            //  "Taxa de Ocupação Geral de UTI \\s+(\\d+)",
+            
+            var match = SearchTextUsingRegEx("Taxa de Ocupação.+UTI\\s+(\\d+)", true);
 
-            var match = SearchTextUsingRegEx("Taxa de Ocupação Geral de UTI\\s+(\\d+)");
-
-            if (match.Groups.Count < 2)
+            var text = 0.ToString();
+            
+            if (match.Groups.Count >= 2)
             {
-                throw new InvalidOperationException("ParseCtiUsage group not found");
+                text = match.Groups[1].Value.Trim();
             }
-
-            var text = match.Groups[1].Value.Trim();
 
             this.CtiUsage = ParseInt(text);
 
@@ -113,7 +112,7 @@ namespace ExtractCovid19Sp
         {
             var match = SearchTextUsingRegEx("\\d{2}\\s*/\\s*\\d{2}\\s*/\\s*\\d{4}");
             var text = match.Value;
-           
+
             this.Date = DateTime.Parse(text, this.provider);
         }
 
@@ -143,7 +142,7 @@ namespace ExtractCovid19Sp
             return text;
         }
 
-        private Match SearchTextUsingRegEx(string pattern)
+        private Match SearchTextUsingRegEx(string pattern, bool allowNoMatch = false)
         {
             var regex = new Regex(
       pattern,
@@ -157,7 +156,10 @@ namespace ExtractCovid19Sp
 
             if (!m.Success)
             {
-                throw new InvalidOperationException($"date not found with pattern {pattern}");
+                if (!allowNoMatch)
+                {
+                    throw new InvalidOperationException($"date not found with pattern {pattern}");
+                }
             }
 
             return m;
