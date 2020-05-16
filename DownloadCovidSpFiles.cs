@@ -51,6 +51,7 @@ namespace ExtractCovid19Sp
                     {
                         var filesToTry = new string[]{  
                                                         "boletim_covid19_diariov.pdf"
+                                                       ,"boletim_covid_19_diario_altas.pdf"
                                                       , "boletim_covid19_diariov2.pdf"
                                                       , "boletim_covid19_diario.pdf"
                                                       , "boletim_covid-19_diariov.pdf"
