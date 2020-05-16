@@ -5,25 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using System.Globalization;
 
 namespace ExtractCovid19Sp
 {
     /// <summary>
     /// Download dos arquivos de Covid-19 da prefeitura de SP
-    /// 
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/27042020_Boletim_Diario.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/28042020_BoletimDiario.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/29042020_BoletimDiario1.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/30042020boletim_covid-19_diario.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/01052020boletim_covid-19_diario%20.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/03052020boletim_covid-19_diario.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/05052020boletim_covid-19_diariov2.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/06052020boletim_covid-19_diariov2.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/07052020boletim_covid-19_diariov2.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/09052020boletim_covid19_diariov2.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/10052020boletim_covid19_diario.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/11052020boletim_covid-19_diariov3.pdf
-    /// https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/12052020boletim_covid-19_diariov.pdf
     /// </summary>
     public class DownloadCovidSpFiles
     {
@@ -33,6 +21,7 @@ namespace ExtractCovid19Sp
         {
             this.dataPath = dataPath;
         }
+
 
         public void DownloadFiles()
         {
@@ -49,26 +38,12 @@ namespace ExtractCovid19Sp
                 {
                     using (var client = new WebClient())
                     {
-                        var filesToTry = new string[]{  
-                                                        "boletim_covid19_diariov.pdf"
-                                                       ,"boletim_covid_19_diario_altas.pdf"
-                                                      , "boletim_covid19_diariov2.pdf"
-                                                      , "boletim_covid19_diario.pdf"
-                                                      , "boletim_covid-19_diariov.pdf"
-                                                      , "boletim_covid-19_diario.pdf"
-                                                      , "boletim_covid-19_diariov2.pdf"
-                                                      , "boletim_covid-19_diariov3.pdf"
-                                                      
-                                                      };
-                        for (int i = 0; i < filesToTry.Length; i++)
-                        {
-                            var isLastFile = (i == (filesToTry.Length - 1));
-                            var downloadOk = TryToDownload(currentDate, localfile, client, filesToTry[i], isLastFile);
-                            if (downloadOk)
-                            {
-                                break;
-                            }
-                        }
+
+                        var dailyPage = FindUrlOfDailyPage(currentDate);
+
+                        var pdfFileUrl = FindPdfPage(dailyPage);
+
+                        client.DownloadFile(pdfFileUrl, localfile);
 
                     }
                 }
@@ -77,35 +52,108 @@ namespace ExtractCovid19Sp
                 currentDate = currentDate.AddDays(1);
             }
 
+        }
 
 
+        private string FindPdfPage(string urlOfDailyPage)
+        {
+            //var path = @"BoletinsDay.html";
+            //var doc = new HtmlDocument();
+            //doc.Load(path);
 
+            HtmlWeb html = new HtmlWeb();
+            var doc = html.Load(urlOfDailyPage);
+
+            var nodes = doc.DocumentNode.SelectNodes("//a");
+
+            var linkNodes = nodes.Where(n => IsFoundPdfLink(n.InnerText)).ToArray();
+
+            var url = "";
+
+            if (linkNodes.Length > 0)
+            {
+                url = linkNodes[0].Attributes["href"].Value;
+            }
+
+            return url;
 
         }
 
-        private static bool TryToDownload(DateTime currentDate, string localfile, WebClient client, string fileTermination, bool throwException)
+        private bool IsFoundPdfLink(string innerText)
         {
-            try
-            {
-                var downloadUrl = $"https://www.prefeitura.sp.gov.br/cidade/secretarias/upload/saude/{currentDate.ToString("ddMMyyyy")}{fileTermination}";
-                client.DownloadFile(downloadUrl, localfile);
-                return true;
-            }
-            catch (Exception)
-            {
-                if (File.Exists(localfile))
-                {
-                    File.Delete(localfile);
-                }
+            innerText = innerText.ToLower();
 
-                if (throwException)
-                {
-                    throw;
-                }
-
+            if (!innerText.Contains("acesse"))
+            {
                 return false;
             }
 
+            if (!innerText.Contains("boletim"))
+            {
+                return false;
+            }
+
+            return true;
         }
+
+
+
+
+        private string FindUrlOfDailyPage(DateTime fileDate)
+        {
+            //var path = @"Boletins.html";
+            //var doc = new HtmlDocument();
+
+            var urlMaiin = "https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/vigilancia_em_saude/doencas_e_agravos/coronavirus/index.php?p=295572";
+            HtmlWeb html = new HtmlWeb();
+            var doc = html.Load(urlMaiin);
+
+            var nodes = doc.DocumentNode.SelectNodes("//a");
+
+            var linkNodes = nodes.Where(n => IsFoundDateLink(fileDate, n.InnerText)).ToArray();
+
+            var url = "";
+
+            if (linkNodes.Length > 0)
+            {
+                url = linkNodes[0].Attributes["href"].Value;
+            }
+
+            return url;
+
+        }
+
+        private bool IsFoundDateLink(DateTime documentDate, string innerText)
+        {
+            innerText = innerText.ToLower();
+
+            if (!innerText.Contains("boletim"))
+            {
+                return false;
+            }
+
+            if (!innerText.Contains(documentDate.Day.ToString()))
+            {
+                return false;
+            }
+
+            if (!innerText.Contains(documentDate.Year.ToString()))
+            {
+                return false;
+            }
+
+            string fullMonthName = documentDate.ToString("MMMM", CultureInfo.CreateSpecificCulture("pt-BR")).ToLower();
+
+            if (!innerText.Contains(fullMonthName))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        
+
+        
     }
 }
