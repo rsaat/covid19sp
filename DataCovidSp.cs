@@ -65,7 +65,7 @@ namespace ExtractCovid19Sp
         {
 
             
-            var match = SearchTextUsingRegEx("Taxa de Ocupação.+UTI\\s+(\\d+)", true);
+            var match = SearchTextUsingRegEx("Taxa.+de.+Ocupação.+UTI\\s+(\\d+)", false);
 
             var text = 0.ToString();
             
