@@ -1,0 +1,53 @@
+{
+  "title": "COVID-19 Dados de Sao Paulo-SP",
+  "subtitle": "Alguns dados coletados dos boletins de COVID-19 prefeitura de Sao Paulo",
+  "description": "Dados coletados dos boletins de COVID-19 da prefeitura de Sao Paulo\n\nReferência:\n[Boletins Covid-19 prefeitura de Sao Paulo](https://www.prefeitura.sp.gov.br/cidade/secretarias/saude/vigilancia_em_saude/doencas_e_agravos/coronavirus/index.php?p=295572)",
+  "isPrivate": false,
+  "id": "ricardosaat/covid19saopaulosp",
+  "licenses": [{"name": "CC0-1.0"}],
+  "resources": [
+    {
+      "path": "covidsp.csv",
+      "description": "Dados diarios extraidos do boletim da prefeitura de sp",
+      "schema": {
+        "fields": [
+          {
+            "name": "Date",
+            "description": "data do boletim",
+            "type": "DateTime"
+          },
+          {
+            "name": "Suspects",
+            "description": "Casos Suspeitos",
+            "type": "number"
+          },
+          {
+            "name": "ConfirmedCases",
+            "description": "Casos Confirmados",
+            "type": "number"
+          },
+          {
+            "name": "DeathsSivep",
+            "description": "Dados de mosrtes do SistemadeVigilânciaEpidemiológicadaGripe(SIVEP-Gripe)",
+            "type": "number"
+          },
+          {
+            "name": "DeathsProAim",
+            "description": "Dados de Mortes ProgramadeAprimoramentodasInformaçõesdeMortalidade(PRO-AIM/SMS-SP)",
+            "type": "number"
+          },
+          {
+              "name": "CtiUsage",
+              "description": "Uso de UTI de hospitais públicos em %",
+              "type": "number"
+          }
+          
+        ]
+      }
+    }
+  ],
+  "keywords": [
+    "brazil",
+    "covid19"
+  ]
+}

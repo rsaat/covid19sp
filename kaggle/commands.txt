@@ -1,0 +1,22 @@
+kaggle d list -m --csv
+
+kaggle d files -v ricardosaat/covid19prefeiturasp
+
+kaggle d download ricardosaat/covid19prefeiturasp
+
+kaggle d download -f covidsp.csv ricardosaat/covid19prefeiturasp
+
+
+kaggle datasets metadata ricardosaat/covid19prefeiturasp
+
+
+kaggle datasets status ricardosaat/covid19prefeiturasp
+
+kaggle datasets init -p ./dataset
+
+kaggle datasets create -p ./dataset
+
+kaggle datasets version -d -m "Atualizacao Automatica" -p ./dataset
+
+
+
