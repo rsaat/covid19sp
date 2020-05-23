@@ -20,11 +20,6 @@ namespace ExtractCovid19Sp
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void cmdExportCsv_Click(object sender, EventArgs e)
         {
             try
