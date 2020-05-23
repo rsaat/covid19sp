@@ -32,7 +32,7 @@ namespace ExtractCovid19Sp
                 var covidDataSpFile = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\data\\covidsp.csv"));
                 var dataPath = Path.GetDirectoryName(covidDataSpFile);
                 var downloadFiles = new DownloadCovidSpFiles(dataPath);
-                downloadFiles.DownloadFiles();
+                downloadFiles.DownloadFiles(dtpEndDate.Value);
 
                 var dataCovidExport = new DataCovidExport(covidDataSpFile);
                 dataCovidExport.ExportPdfToCsv();
@@ -44,6 +44,11 @@ namespace ExtractCovid19Sp
             }
 
 
+        }
+
+        private void frmExportCovidToCsv_Load(object sender, EventArgs e)
+        {
+            dtpEndDate.Value = DateTime.Now.Date;
         }
     }
 }

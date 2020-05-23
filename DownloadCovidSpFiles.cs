@@ -23,14 +23,14 @@ namespace ExtractCovid19Sp
         }
 
 
-        public void DownloadFiles()
+        public void DownloadFiles(DateTime lastDate)
         {
 
             var startDate = new DateTime(2020, 04, 30);
 
             var currentDate = startDate;
 
-            while (currentDate <= DateTime.Now.Date)
+            while (currentDate <= lastDate)
             {
                 var localfile = Path.Combine(this.dataPath, $"covidsp{currentDate.ToString("yyyy-MM-dd")}.pdf");
 
@@ -152,8 +152,8 @@ namespace ExtractCovid19Sp
             return true;
         }
 
-        
 
-        
+
+
     }
 }
