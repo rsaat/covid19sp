@@ -53,6 +53,11 @@ namespace ExtractCovid19Sp
         [FieldConverter(ConverterKind.Int32)]
         public int CtiUsage { get; set; }
 
+        [FieldNullValue(0)]
+        [FieldOptional]
+        [FieldConverter(ConverterKind.Int32)]
+        public int Recovered { get; set; }
+
         private void ParseData()
         {
             ParseDate();
@@ -64,11 +69,11 @@ namespace ExtractCovid19Sp
         private void ParseCtiUsage()
         {
 
-            
+
             var match = SearchTextUsingRegEx("Taxa.+de.+Ocupação.+UTI\\s+(\\d+)", false);
 
             var text = 0.ToString();
-            
+
             if (match.Groups.Count >= 2)
             {
                 text = match.Groups[1].Value.Trim();

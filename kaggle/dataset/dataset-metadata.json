@@ -37,11 +37,16 @@
             "type": "number"
           },
           {
-              "name": "CtiUsage",
-              "description": "Uso de UTI de hospitais públicos em %",
-              "type": "number"
+            "name": "CtiUsage",
+            "description": "Uso de UTI de hospitais públicos em %",
+            "type": "number"
+          },
+          {
+            "name": "Recovered",
+            "description": "Estimativa de Casos Recuperados ConfirmedCases[i-13] - DeathsSivep",
+            "type": "number"
           }
-          
+
         ]
       }
     }
