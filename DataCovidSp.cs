@@ -24,14 +24,16 @@ namespace ExtractCovid19Sp
 
         public DataCovidSp()
         {
-
+            this.Location = "sao paulo";
         }
 
         public DataCovidSp(string textDailyData)
         {
             this.provider = new CultureInfo("pt-BR");
             this.textDailyData = ReplaceAllSpaceWithSingleSpace(textDailyData);
+            this.Location = "sao paulo";
             ParseData();
+
 
         }
 
@@ -57,6 +59,10 @@ namespace ExtractCovid19Sp
         [FieldOptional]
         [FieldConverter(ConverterKind.Int32)]
         public int Recovered { get; set; }
+
+        [FieldNullValue("sao paulo")]
+        [FieldOptional]
+        public string Location { get; set; }
 
         private void ParseData()
         {

@@ -45,6 +45,11 @@
             "name": "Recovered",
             "description": "Estimativa de Casos Recuperados ConfirmedCases[i-13] - DeathsSivep",
             "type": "number"
+          },
+          {
+            "name": "Location",
+            "description": "Local das estatísticas",
+            "type": "string"
           }
 
         ]

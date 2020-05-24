@@ -62,12 +62,12 @@ namespace ExtractCovid19Sp
             listDataCovidSp.Add(datacovid);
 
             var valuesByDate = listDataCovidSp.OrderBy(d => d.Date).ToArray();
-           
+
             for (int i = 13; i < valuesByDate.Length; i++)
             {
-                var recovered = valuesByDate[i-13].ConfirmedCases - valuesByDate[i].DeathsSivep;
-                recovered = (recovered < valuesByDate[i-1].Recovered) ? valuesByDate[i - 1].Recovered : recovered;
-                valuesByDate[i].Recovered = (recovered>=0) ? recovered : 0;
+                var recovered = valuesByDate[i - 13].ConfirmedCases - valuesByDate[i].DeathsSivep;
+                recovered = (recovered < valuesByDate[i - 1].Recovered) ? valuesByDate[i - 1].Recovered : recovered;
+                valuesByDate[i].Recovered = (recovered >= 0) ? recovered : 0;
             }
 
             engine.WriteFile(filename, valuesByDate);
@@ -82,6 +82,15 @@ namespace ExtractCovid19Sp
             if (File.Exists(filename))
             {
                 var records = engine.ReadFile(filename);
+
+                foreach (var r in records)
+                {
+                    if (string.IsNullOrEmpty(r.Location))
+                    {
+                        r.Location = "sao paulo";
+                    }
+                }
+
                 listDataCovidSp.AddRange(records);
             }
 

@@ -19,4 +19,8 @@ kaggle datasets create -p ./dataset
 kaggle datasets version -d -m "Atualizacao Automatica" -p ./dataset
 
 
+https://github.com/Kaggle/kaggle-api/wiki/Dataset-Metadata
+https://specs.frictionlessdata.io//table-schema/#types-and-formats
+
+
 
