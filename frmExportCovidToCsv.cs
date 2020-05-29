@@ -31,6 +31,9 @@ namespace ExtractCovid19Sp
 
                 var dataCovidExport = new DataCovidExport(covidDataSpFile);
                 dataCovidExport.ExportPdfToCsv();
+
+                MessageBox.Show("Arquivo CSV Atualizado");
+
             }
             catch (Exception ex)
             {

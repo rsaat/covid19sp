@@ -75,8 +75,9 @@ namespace ExtractCovid19Sp
         private void ParseCtiUsage()
         {
 
-
-            var match = SearchTextUsingRegEx("Taxa.+de.+Ocupação.+UTI\\s+(\\d+)", false);
+            var pattern = "Taxa.+de.+Ocupação.+UTI.+\\(.*somente.+municipais.*\\)\\s+(\\d+)";
+            pattern = "Taxa.+de.+Ocupação.+UTI\\s+(\\d+)";
+            var match = SearchTextUsingRegEx(pattern, false);
 
             var text = 0.ToString();
 
