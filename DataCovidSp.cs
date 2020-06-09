@@ -122,8 +122,8 @@ namespace ExtractCovid19Sp
 
         private void ParseDate()
         {
-            var match = SearchTextUsingRegEx("\\d{2}\\s*/\\s*\\d{2}\\s*/\\s*\\d{4}");
-            var text = match.Value;
+            var match = SearchTextUsingRegEx("\\d\\s*\\d\\s*/\\s*\\d{2}\\s*/\\s*\\d{4}");
+            var text = match.Value.Replace(" ","");
 
             this.Date = DateTime.Parse(text, this.provider);
         }
