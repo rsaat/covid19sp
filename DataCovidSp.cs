@@ -91,7 +91,7 @@ namespace ExtractCovid19Sp
         }
         private void ParseFatalityTable()
         {
-            var match = SearchTextUsingRegEx("Município\\s+de\\s+São Paulo([\\d/.\\s,]+)");
+            var match = SearchTextUsingRegEx("Município\\s+de\\s+São P.{0,1}aulo([\\d/.\\s,]+)");
 
             if (match.Groups.Count < 2)
             {
@@ -122,7 +122,7 @@ namespace ExtractCovid19Sp
 
         private void ParseDate()
         {
-            var match = SearchTextUsingRegEx("\\d\\s*\\d\\s*/\\s*\\d{2}\\s*/\\s*\\d{4}");
+            var match = SearchTextUsingRegEx("\\d\\s*\\d\\s*/\\d\\s*\\d\\s*/\\s*\\d{4}");
             var text = match.Value.Replace(" ","");
 
             this.Date = DateTime.Parse(text, this.provider);
