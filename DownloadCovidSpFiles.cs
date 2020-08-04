@@ -61,6 +61,11 @@ namespace ExtractCovid19Sp
             //var doc = new HtmlDocument();
             //doc.Load(path);
 
+            if (urlOfDailyPage.ToLower().EndsWith(".pdf"))
+            {
+                return urlOfDailyPage;
+            }
+
             HtmlWeb html = new HtmlWeb();
             var doc = html.Load(urlOfDailyPage);
 

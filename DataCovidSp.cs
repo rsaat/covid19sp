@@ -31,6 +31,7 @@ namespace ExtractCovid19Sp
         {
             this.provider = new CultureInfo("pt-BR");
             this.textDailyData = ReplaceAllSpaceWithSingleSpace(textDailyData);
+            this.textDailyData = ReplaceDataForQuickFixesForSomeDates(this.textDailyData);
             this.Location = "sao paulo";
             ParseData();
 
@@ -91,7 +92,7 @@ namespace ExtractCovid19Sp
         }
         private void ParseFatalityTable()
         {
-            var match = SearchTextUsingRegEx("Município\\s+de\\s+São P.{0,1}aulo([\\d/.\\s,]+)");
+            var match = SearchTextUsingRegEx("Município\\s+de\\s+São P.{0,1}aulo([\\d/.\\s,\\*\\%x\\–]+)");
 
             if (match.Groups.Count < 2)
             {
@@ -102,6 +103,10 @@ namespace ExtractCovid19Sp
 
             text = text.Replace("\n", " ");
             text = text.Replace("\r", " ");
+            text = text.Replace("*", " ");
+            text = text.Replace("x", "");
+            text = text.Replace("–", "");
+            text = text.Replace("%", " ");
 
             var tokens = text.Split(' ');
 
@@ -109,8 +114,16 @@ namespace ExtractCovid19Sp
 
             this.Suspects = ParseInt(tokens[0]);
             this.ConfirmedCases = ParseInt(tokens[1]);
-            this.DeathsSivep = ParseInt(tokens[3]);
-            this.DeathsProAim = ParseInt(tokens[5]);
+            if (tokens.Count() == 4)
+            {
+                this.DeathsSivep = ParseInt(tokens[2]);
+            }
+            else
+            {
+                this.DeathsSivep = ParseInt(tokens[3]);
+            }
+
+            this.DeathsProAim = this.DeathsSivep; //   ParseInt(tokens[5]);
 
         }
 
@@ -123,9 +136,18 @@ namespace ExtractCovid19Sp
         private void ParseDate()
         {
             var match = SearchTextUsingRegEx("\\d\\s*\\d\\s*/\\d\\s*\\d\\s*/\\s*\\d{4}");
-            var text = match.Value.Replace(" ","");
+            var text = match.Value.Replace(" ", "");
 
             this.Date = DateTime.Parse(text, this.provider);
+        }
+
+        private string ReplaceDataForQuickFixesForSomeDates(string text)
+        {
+            text = text.Replace("Méunicípio de São Paéuélo", "Município de São Paulo");
+            text = text.Replace("Móunicípio de São Paóuólo", "Município de São Paulo");
+            text = text.Replace("MLunicípio de São PaLuLlo", "Município de São Paulo");
+            text = text.Replace("Municípioé deé São Paulo", "Município de São Paulo");
+            return text;
         }
 
         private string ReplaceAllSpaceWithSingleSpace(string text)
