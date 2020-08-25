@@ -78,7 +78,16 @@ namespace ExtractCovid19Sp
 
             var pattern = "Taxa.+de.+Ocupação.+UTI.+\\(.*somente.+municipais.*\\)\\s+(\\d+)";
             pattern = "Taxa.+de.+Ocupação.+UTI\\s+(\\d+)";
-            var match = SearchTextUsingRegEx(pattern, false);
+            //pattern = "Taxa.+de.+Ocõupação.+UTI\\s+(\\d+)";
+
+
+            var match = SearchTextUsingRegEx(pattern, true);
+
+            if (!match.Success)
+            {
+                this.CtiUsage = 0;
+                return;
+            }
 
             var text = 0.ToString();
 
@@ -147,6 +156,8 @@ namespace ExtractCovid19Sp
             text = text.Replace("Móunicípio de São Paóuólo", "Município de São Paulo");
             text = text.Replace("MLunicípio de São PaLuLlo", "Município de São Paulo");
             text = text.Replace("Municípioé deé São Paulo", "Município de São Paulo");
+            text = text.Replace("Município4 de4 São Paulo", "Município de São Paulo");
+            text = text.Replace("Município% de% São Paulo", "Município de São Paulo");
             return text;
         }
 
