@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Globalization;
+using System.Web;
 
 namespace ExtractCovid19Sp
 {
@@ -115,6 +116,8 @@ namespace ExtractCovid19Sp
 
             var nodes = doc.DocumentNode.SelectNodes("//a");
 
+            var nodesInnerText = nodes.Select(x => x.InnerText).ToArray();
+
             var linkNodes = nodes.Where(n => IsFoundDateLink(fileDate, n.InnerText)).ToArray();
 
             var url = "";
@@ -130,12 +133,34 @@ namespace ExtractCovid19Sp
 
         private bool IsFoundDateLink(DateTime documentDate, string innerText)
         {
+            innerText = System.Net.WebUtility.HtmlDecode(innerText);
+
             innerText = innerText.ToLower();
 
             if (!innerText.Contains("boletim"))
             {
                 return false;
             }
+
+            if (documentDate.Day == 1)
+            {
+                if (!innerText.Contains("1 de"))
+                {
+                    if (!innerText.Contains("1º de"))
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (!innerText.Contains($"{documentDate.Day} de"))
+                {
+                    return false;
+                }
+
+            }
+
 
             if (!innerText.Contains(documentDate.Day.ToString()))
             {
